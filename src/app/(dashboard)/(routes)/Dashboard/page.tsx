@@ -1,6 +1,6 @@
 'use client';
 import React from "react";
-import { useAuth, RedirectToSignIn, UserButton } from "@clerk/nextjs";
+import { useAuth, RedirectToSignIn } from "@clerk/nextjs";
 function Dashboard() {
   const { isLoaded, userId } = useAuth();
   if (!isLoaded) {
@@ -17,7 +17,6 @@ function Dashboard() {
     <div>
       <h1>Welcome to the Dashboard!</h1>
       <p>Protected content for signed-in users only.</p>
-      <UserButton></UserButton>
     </div>
   );
 }
