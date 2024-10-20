@@ -1,7 +1,7 @@
 "use client";
 import Heading from "@/components/Heading";
 import * as z from "zod";
-import { MessageSquare } from "lucide-react";
+import { Loader, Loader2, MessageSquare } from "lucide-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { promptSchema } from "./Constants";
@@ -11,6 +11,7 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
+import Empty from "@/components/Empty";
 function page() {
   const [result, setResult] = useState<string | null>(null);
   const router = useRouter();
@@ -29,7 +30,7 @@ function page() {
       });
       console.log(response.data.message);
       setResult(response.data.message);
-      form.reset();
+      useform.reset();
     } catch (error) {
       console.error("Error generating text:", error);
       setResult("Failed to generate text.");
@@ -78,11 +79,21 @@ function page() {
             </form>
           </Form>
         </div>
-        <div>
-          <h3 className="mt-4 text-lg font-semibold">AI Response:</h3>
-          <div className="p-4 border rounded bg-gray-100">
-            {result ? result : "No response yet"}
-          </div>
+        <div className="space-y-4 mt-4">
+          {isLoading && (
+            <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
+              <Loader className="animate-spin" />
+            </div>
+          )}
+          {isLoading && (
+            <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted"></div>
+          )}
+          {result === null && !isLoading && (
+            <Empty label="No Conversation yet" />
+          )}
+          {result && (
+            <div className="p-4 border rounded bg-gray-100">{result}</div>
+          )}
         </div>
       </div>
     </div>
