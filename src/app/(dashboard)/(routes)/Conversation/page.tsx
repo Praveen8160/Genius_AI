@@ -53,6 +53,9 @@ function page() {
             </form>
         </Form>
         </div> 
+        <div>
+          show message 
+        </div>
       </div>
     </div>
   );
