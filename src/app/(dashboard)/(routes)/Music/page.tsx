@@ -1,7 +1,7 @@
 "use client";
 import Heading from "@/components/Heading";
 import * as z from "zod";
-import { Loader,Code } from "lucide-react";
+import { Loader, Music } from "lucide-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { promptSchema } from "./Constants";
@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import Empty from "@/components/Empty";
 function page() {
-  const [result, setResult] = useState<string | null>(null);
+  const [music, setMusic] = useState<string | null>(null);
   const router = useRouter();
   const useform = useForm<z.infer<typeof promptSchema>>({
     resolver: zodResolver(promptSchema),
@@ -21,26 +21,19 @@ function page() {
       prompt: "",
     },
   });
-  // const extractCodeSnippet = (text: string) => {
-  //   // Use a regex to capture the code block
-  //   const codeBlockRegex = /```([\s\S]*?)```/;
-  //   const match = text.match(codeBlockRegex);
-  //   return match ? match[1].trim() : "No valid code snippet found.";
-  // };
   const isLoading = useform.formState.isSubmitting;
   const onsubmit = async (val: z.infer<typeof promptSchema>) => {
     try {
-      console.log(val.prompt);
-      const response = await axios.post("/api/Code/", {
+      setMusic(null);
+      const response = await axios.post("/api/Music/", {
         prompt: val.prompt,
       });
-      console.log(response.data);
-      // const codeSnippet = extractCodeSnippet(response.data.message);
-      setResult(response.data);
+      console.log(response.data.audio);
+      setMusic(response.data.audio);
       useform.reset();
     } catch (error) {
-      console.error("Error generating Code:", error);
-      setResult("Failed to generate Code.");
+      console.error("Error generating Music:", error);
+      setMusic("Failed to generate text.");
     } finally {
       router.refresh();
     }
@@ -48,11 +41,11 @@ function page() {
   return (
     <div>
       <Heading
-        title="Code"
-        description="Generate code with Genius AI"
-        Icon={Code}
-        iconColor="text-green-700"
-        bgColor="bg-violet-700/10"
+        title="Music"
+        description="Turn Your Prompt Into Music"
+        Icon={Music}
+        iconColor="text-emerald-700"
+        bgColor="bg-emerald-700/10"
       ></Heading>
       <div className="px-4 lg:px-8">
         <div>
@@ -70,7 +63,7 @@ function page() {
                         className="
                             border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
                         disabled={isLoading}
-                        placeholder="Simple Toggle button of React hook"
+                        placeholder="Piano solo"
                         {...field}
                       />
                     </FormControl>
@@ -93,13 +86,13 @@ function page() {
               <p>Genius thinking...</p>
             </div>
           )}
-          {result === null && !isLoading && (
-            <Empty label="No Conversation yet" />
+          {music === null && !isLoading && (
+            <Empty label="No Music generated yet" />
           )}
-          {result && (
-            <pre className="p-4 border rounded bg-gray-100 whitespace-pre-wrap">
-                <code className="language-javascript">{result}</code>
-              </pre>
+          {music && (
+            <audio controls className="w-full mt-8">
+              <source src={music} />
+            </audio>
           )}
         </div>
       </div>

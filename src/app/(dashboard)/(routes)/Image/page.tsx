@@ -75,7 +75,7 @@ function page() {
                         className="
                             border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
                         disabled={isLoading}
-                        placeholder="Simple Toggle button of React hook"
+                        placeholder="an insect robot preparing a delicious meal"
                         {...field}
                       />
                     </FormControl>
@@ -122,13 +122,11 @@ function page() {
           {isLoading && (
             <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
               <Loader className="animate-spin" />
+              <p>Genius Generating...</p>
             </div>
           )}
           {(Images === null||Images.length===0) && !isLoading && (
-            // <Empty label="No Conversation yet" />
-            <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
-              hsdgshg
-            </div>
+            <Empty label="No Image Generated yet" />
           )}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-4 gap-4 mt-8">
             {Images?.map((image, index) => (

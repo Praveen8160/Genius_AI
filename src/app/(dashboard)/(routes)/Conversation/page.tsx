@@ -1,7 +1,7 @@
 "use client";
 import Heading from "@/components/Heading";
 import * as z from "zod";
-import { Loader, Loader2, MessageSquare } from "lucide-react";
+import { Loader, MessageSquare } from "lucide-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { promptSchema } from "./Constants";
@@ -28,8 +28,7 @@ function page() {
       const response = await axios.post("/api/Conversation/", {
         prompt: val.prompt,
       });
-      console.log(response.data.message);
-      setResult(response.data.message);
+      setResult(response.data);
       useform.reset();
     } catch (error) {
       console.error("Error generating text:", error);
