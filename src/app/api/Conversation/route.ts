@@ -1,6 +1,5 @@
 // import { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
-import axios from "axios";
 import Replicate from "replicate";
 
 const replicate = new Replicate({

@@ -8,6 +8,7 @@ import {
   ImageIcon,
   MessageSquare,
   Music,
+  RemoveFormatting,
   VideoIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -42,14 +43,14 @@ function Dashboard() {
       bgcolor: "bg-pink-700/10",
     },
     {
-      label: "Video Generation",
-      Icon: VideoIcon,
-      href: "/Video",
+      label: "Background Removal",
+      Icon: RemoveFormatting,
+      href: "/BackgroundRemove",
       color: "text-orange-500",
       bgcolor: "bg-orange-500/10",
     },
     {
-      label: "Music Generation",
+      label: "Audio Generation",
       Icon: Music,
       href: "/Music",
       color: "text-emerald-500",
@@ -78,7 +79,7 @@ function Dashboard() {
         {tools.map((tool) => (
           <Card
             onClick={() => router.push(tool.href)}
-            key={tool.href} 
+            key={tool.href}
             className="p-4 border-black/5 flex items-center justify-between hover:shadow-md transition cursor-pointer"
           >
             <div className="flex items-center gap-x-4">
