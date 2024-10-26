@@ -1,8 +1,8 @@
 "use client";
 import Heading from "@/components/Heading";
 import * as z from "zod";
-import { LinkIcon, Loader } from "lucide-react";
-import React, { useState } from "react";
+import { DeleteIcon, LinkIcon, Loader } from "lucide-react";
+import React, { use, useState } from "react";
 import { useForm } from "react-hook-form";
 import { promptSchema } from "./Constants";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,9 +12,18 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import Empty from "@/components/Empty";
+import { CldImage } from "next-cloudinary";
 function page() {
   const [result, setResult] = useState<string | null>(null);
+  const [userprompt, setPrompt] = useState<string>("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const router = useRouter();
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.[0]) {
+      setImageFile(e.target.files[0]);
+    }
+  };
   const useform = useForm<z.infer<typeof promptSchema>>({
     resolver: zodResolver(promptSchema),
     defaultValues: {
@@ -24,12 +33,22 @@ function page() {
   const isLoading = useform.formState.isSubmitting;
   const onsubmit = async (val: z.infer<typeof promptSchema>) => {
     try {
+      setResult("")
+      if (!imageFile || !val.prompt) {
+        alert("Please upload an image and enter a prompt");
+        return;
+      }
       console.log(val.prompt);
-      const response = await axios.post("/api/UrlToPng/", {
-        prompt: val.prompt,
+      setPrompt(val.prompt);
+      const formData = new FormData();
+      formData.append("file", imageFile);
+      const response = await axios.post("/api/removeBackground", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
-      setResult(response.data);
-      useform.reset();
+      console.log("response.url", response.data.url);
+      setResult(response.data.url);
     } catch (error) {
       console.error("Error generating Image:", error);
       setResult("Failed to generate Image.");
@@ -40,9 +59,9 @@ function page() {
   return (
     <div>
       <Heading
-        title="URL To PNG"
-        description="Generate a PNG from a URL"
-        Icon={LinkIcon}
+        title="Object Removal"
+        description="Remove an object from an image"
+        Icon={DeleteIcon}
         iconColor="text-red-500"
         bgColor="bg-red-500/10"
       ></Heading>
@@ -56,20 +75,27 @@ function page() {
               <FormField
                 name="prompt"
                 render={({ field }) => (
-                  <FormItem className="col-span-12 lg:col-span-10">
+                  <FormItem className="col-span-12 lg:col-span-5">
                     <FormControl>
                       <Input
-                        type="url"
+                        type="text"
                         className="
                             border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
                         disabled={isLoading}
-                        placeholder="Enter Url"
+                        placeholder="Enter Object for remove"
                         {...field}
                       />
                     </FormControl>
                   </FormItem>
                 )}
               ></FormField>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                disabled={isLoading}
+                className="col-span-12 lg:col-span-5"
+              />
               <Button
                 className="col-span-12 lg:col-span-2"
                 disabled={isLoading}
@@ -89,7 +115,21 @@ function page() {
             <Empty label="No Image generated yet" />
           )}
           {result && (
-            <div className="p-4 border rounded bg-gray-100">{result}</div>
+            <div className="p-4 border rounded bg-gray-100">
+              <h3>Processed Image:</h3>
+              <CldImage
+                src={result}
+                width="960"
+                height="600"
+                remove={{
+                  prompt: userprompt,
+                  removeShadow: true
+                }}
+                alt="new image"
+                sizes="100vw"
+              
+              />
+            </div>
           )}
         </div>
       </div>

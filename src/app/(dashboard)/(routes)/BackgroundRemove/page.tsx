@@ -21,6 +21,8 @@ function page() {
   };
 
   const handleUpload = async () => {
+    setisLoading(true);
+    setImageUrl("")
     if (!imageFile) {
       alert("Please upload an image");
       return;
@@ -34,12 +36,11 @@ function page() {
         },
       });
       console.log("response.url", response.data.url);
-      // Get the Cloudinary URL and store it
       setImageUrl(response.data.url);
     } catch (error) {
       console.error("Error processing image:", error);
-      // setResult("Failed to process image.");
     } finally {
+      setisLoading(false);
       router.refresh();
     }
   };
