@@ -33,7 +33,7 @@ function page() {
   const isLoading = useform.formState.isSubmitting;
   const onsubmit = async (val: z.infer<typeof promptSchema>) => {
     try {
-      setResult("")
+      setResult("");
       if (!imageFile || !val.prompt) {
         alert("Please upload an image and enter a prompt");
         return;
@@ -107,8 +107,9 @@ function page() {
         </div>
         <div className="space-y-4 mt-4">
           {isLoading && (
-            <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
+            <div className="p-8 rounded-lg w-full flex flex-col gap-4 items-center justify-center bg-muted">
               <Loader className="animate-spin" />
+              <p>Genius Generating...</p>
             </div>
           )}
           {result === null && !isLoading && (
@@ -123,11 +124,10 @@ function page() {
                 height="600"
                 remove={{
                   prompt: userprompt,
-                  removeShadow: true
+                  removeShadow: true,
                 }}
                 alt="new image"
                 sizes="100vw"
-              
               />
             </div>
           )}

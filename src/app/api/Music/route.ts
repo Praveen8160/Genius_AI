@@ -1,31 +1,37 @@
 // import { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
-import Replicate from "replicate";
+import axios from "axios";
+const HUGGING_FACE_API_KEY = process.env.HUGGING_FACE_API_KEY;
 
-const replicate = new Replicate({
-  auth: process.env.REPLICATE_API_TOKEN,
-});
 export async function POST(req: Request) {
+  const { prompt } = await req.json();
+  console.log(prompt);
+  if (!prompt) {
+    return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
+  }
   try {
-    const { prompt } = await req.json();
-    if (!prompt) {
-      return NextResponse.json(
-        { error: "Prompt is required" },
-        { status: 400 }
-      );
-    }
-    const input = {
-      prompt_b: prompt,
-    };
-    const response = await replicate.run(
-      "riffusion/riffusion:8cf61ea6c56afd61d8f5b9ffd14d7c216c0a93844ce2d82ac1c9ecc9c7f24e05",
-      { input }
+    const response = await axios.post(
+      "https://api-inference.huggingface.co/models/facebook/fastspeech2-en-ljspeech",
+      { inputs: prompt },
+      {
+        headers: {
+          Authorization: `Bearer ${HUGGING_FACE_API_KEY}`,
+          "Content-Type": "application/json"
+        },
+        responseType: "arraybuffer", // Important: handle binary response
+      }
     );
-    return NextResponse.json(response);
-  } catch (error) {
-    console.log("error",error)
+    console.log("response",response)
+    const audioBase64 = Buffer.from(response.data, "binary").toString("base64");
+    console.log("audioBase64",audioBase64)
     return NextResponse.json(
-      { error: "Failed to generate Music" },
+      { audio: `data:audio/wav;base64,${audioBase64}` },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error with Hugging Face request:", error);
+    return NextResponse.json(
+      { error: "Failed to generate text" },
       { status: 500 }
     );
   }

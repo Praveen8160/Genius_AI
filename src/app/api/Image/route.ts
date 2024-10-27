@@ -37,7 +37,4 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
-  //   } else {
-  //     res.status(405).json({ error: "Method not allowed" });
-  //   }
 }

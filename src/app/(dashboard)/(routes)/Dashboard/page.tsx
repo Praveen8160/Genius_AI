@@ -4,7 +4,9 @@ import { useAuth, RedirectToSignIn } from "@clerk/nextjs";
 import { Card } from "@/components/ui/card";
 import {
   ArrowRight,
+  AudioLinesIcon,
   Code,
+  DeleteIcon,
   ImageIcon,
   MessageSquare,
   Music,
@@ -50,8 +52,15 @@ function Dashboard() {
       bgcolor: "bg-orange-500/10",
     },
     {
+    label: "Object Removal",
+    Icon: DeleteIcon,
+    href: "/ObjectRemove",
+    color: "text-red-500",
+    bgcolor: "bg-red-500/10",
+    },
+    {
       label: "Audio Generation",
-      Icon: Music,
+      Icon: AudioLinesIcon,
       href: "/Music",
       color: "text-emerald-500",
       bgcolor: "bg-emerald-500/10",

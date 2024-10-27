@@ -1,7 +1,7 @@
 "use client";
 import Heading from "@/components/Heading";
 import * as z from "zod";
-import { Loader, Music } from "lucide-react";
+import { AudioLinesIcon, Loader, Music } from "lucide-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { promptSchema } from "./Constants";
@@ -25,10 +25,11 @@ function page() {
   const onsubmit = async (val: z.infer<typeof promptSchema>) => {
     try {
       setMusic(null);
-      const response = await axios.post("/api/Music/", {
+      const response = await axios.post("/api/Music", {
         prompt: val.prompt,
       });
-      console.log(response.data.audio);
+      console.log("response",response);
+      console.log("response.data.audio",response.data.audio);
       setMusic(response.data.audio);
       useform.reset();
     } catch (error) {
@@ -41,9 +42,9 @@ function page() {
   return (
     <div>
       <Heading
-        title="Music"
-        description="Turn Your Prompt Into Music"
-        Icon={Music}
+        title="Audio"
+        description="Turn Your Prompt Into Audio"
+        Icon={AudioLinesIcon}
         iconColor="text-emerald-700"
         bgColor="bg-emerald-700/10"
       ></Heading>
