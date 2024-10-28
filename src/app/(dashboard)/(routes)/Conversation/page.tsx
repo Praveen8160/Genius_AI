@@ -12,8 +12,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import Empty from "@/components/Empty";
+import { useAuth } from "@clerk/nextjs";
 function page() {
   const [result, setResult] = useState<string | null>(null);
+  const { userId } = useAuth();
   const router = useRouter();
   const useform = useForm<z.infer<typeof promptSchema>>({
     resolver: zodResolver(promptSchema),
@@ -27,6 +29,7 @@ function page() {
       console.log(val.prompt);
       const response = await axios.post("/api/Conversation/", {
         prompt: val.prompt,
+        userId: userId
       });
       setResult(response.data);
       useform.reset();
@@ -81,9 +84,9 @@ function page() {
         <div className="space-y-4 mt-4">
           {isLoading && (
             <div className="p-8 rounded-lg w-full flex flex-col gap-4 items-center justify-center bg-muted">
-            <Loader className="animate-spin" />
-            <p>Genius Thinking...</p>
-          </div>
+              <Loader className="animate-spin" />
+              <p>Genius Thinking...</p>
+            </div>
           )}
           {isLoading && (
             <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted"></div>

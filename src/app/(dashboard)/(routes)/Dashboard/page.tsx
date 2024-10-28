@@ -29,6 +29,9 @@ function Dashboard() {
   if (!userId) {
     return <RedirectToSignIn />;
   }
+  else{
+    console.log(userId)
+  }
   const tools = [
     {
       label: "Conversation",

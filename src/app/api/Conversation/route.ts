@@ -1,19 +1,26 @@
-// import { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
 import Replicate from "replicate";
-
+import { checkAPiLimit, increaseApiLimit } from "../../../lib/api-limit";
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,
 });
 
-// const HUGGING_FACE_API_KEY = process.env.HUGGING_FACE_API_KEY;
-
 export async function POST(req: Request) {
-  const { prompt } = await req.json();
-  console.log(prompt);
+  const { prompt , userId } = await req.json();
+
   if (!prompt) {
     return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
   }
+  console.log("before limit check");
+  // const { userId } = getAuth(req);
+  const isfreeTrial = await checkAPiLimit(userId);
+  if (!isfreeTrial) {
+    return NextResponse.json(
+      { error: "You have reached your free trial limit" },
+      { status: 403 }
+    );
+  }
+  console.log("after limit check");
   const input = {
     top_k: 50,
     top_p: 0.9,
@@ -25,32 +32,13 @@ export async function POST(req: Request) {
     presence_penalty: 0,
     frequency_penalty: 0,
   };
-  //   const structuredPrompt = `
-  //   You are an AI assistant. Please respond with only the code for the following request:
-  //   "${prompt}"
-
-  //   Provide the complete code without additional explanations or comments.
-  // `;
 
   try {
-    // const response = await axios.post(
-    //   "https://api-inference.huggingface.co/models/bigcode/starcoder",
-    //   {
-    //     inputs: structuredPrompt,
-    //   },
-    //   {
-    //     headers: {
-    //       Authorization: `Bearer ${HUGGING_FACE_API_KEY}`,
-    //     },
-    //   }
-    // );
-    // console.log(response.data);
-    // const generatedText = response.data[0]?.generated_text || "No code generated.";
-    // return NextResponse.json({ message: generatedText.trim() }, { status: 200 });
     const response = await replicate.run("meta/meta-llama-3.1-405b-instruct", {
       input,
     });
-    // console.log(response);
+
+    await increaseApiLimit(userId);
     return NextResponse.json(response);
   } catch (error) {
     console.error("Error with request:", error);
@@ -59,7 +47,4 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
-  //   } else {
-  //     res.status(405).json({ error: "Method not allowed" });
-  //   }
 }

@@ -1,6 +1,6 @@
 // import { NextApiRequest, NextApiResponse } from "next";
+import { checkAPiLimit, increaseApiLimit } from "@/lib/api-limit";
 import { NextResponse } from "next/server";
-import axios from "axios";
 import Replicate from "replicate";
 
 const replicate = new Replicate({
@@ -9,10 +9,17 @@ const replicate = new Replicate({
 // const HUGGING_FACE_API_KEY = process.env.HUGGING_FACE_API_KEY;
 
 export async function POST(req: Request) {
-  const { prompt } = await req.json();
+  const { prompt,userId } = await req.json();
   console.log(prompt)
   if (!prompt) {
     return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
+  }
+  const isfreeTrial = await checkAPiLimit(userId);
+  if (!isfreeTrial) {
+    return NextResponse.json(
+      { error: "You have reached your free trial limit" },
+      { status: 403 }
+    );
   }
   // const structuredPrompt = `
   //    You are an AI assistant. Provide a complete and well-formatted code snippet in response to the following request:
@@ -47,6 +54,7 @@ export async function POST(req: Request) {
     // const generatedText = response.data[0].generated_text || "No code generated.";
     // return NextResponse.json({ message: generatedText.trim() }, { status: 200 });
     const response = await replicate.run("ibm-granite/granite-3.0-8b-instruct", { input });
+    await increaseApiLimit(userId);
     console.log(response);
     return NextResponse.json(response);
   } catch (error) {

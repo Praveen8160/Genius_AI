@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import Empty from "@/components/Empty";
+import { useAuth } from "@clerk/nextjs";
 import {
   Select,
   SelectContent,
@@ -23,6 +24,7 @@ import { Card, CardFooter } from "@/components/ui/card";
 import Image from "next/image";
 function page() {
   const [Images, setImages] = useState<string[] | null>([]);
+  const { userId } = useAuth();
   const router = useRouter();
   const useform = useForm<z.infer<typeof promptSchema>>({
     resolver: zodResolver(promptSchema),
@@ -39,6 +41,7 @@ function page() {
       const response = await axios.post("/api/Image/", {
         prompt: val.prompt,
         amount: val.amount,
+        userId: userId
       });
       setImages([]);
       setImages(response.data.message);
