@@ -12,8 +12,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import Empty from "@/components/Empty";
+import { useAuth } from "@clerk/nextjs";
 function page() {
   const [music, setMusic] = useState<string | null>(null);
+  const { userId } = useAuth();
   const router = useRouter();
   const useform = useForm<z.infer<typeof promptSchema>>({
     resolver: zodResolver(promptSchema),
@@ -27,6 +29,7 @@ function page() {
       setMusic(null);
       const response = await axios.post("/api/Music", {
         prompt: val.prompt,
+        userId: userId
       });
       console.log("response",response);
       console.log("response.data.audio",response.data.audio);

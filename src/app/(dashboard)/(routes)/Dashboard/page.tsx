@@ -27,6 +27,7 @@ function Dashboard() {
 
   // If user is not signed in, redirect to the Sign-In page
   if (!userId) {
+    console.log("running")
     return <RedirectToSignIn />;
   }
   else{

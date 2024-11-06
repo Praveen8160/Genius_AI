@@ -47,7 +47,6 @@ function page() {
       setImages(response.data.message);
       useform.reset();
     } catch (error) {
-      // console.error("Error generating text:", error);
       setImages([]);
     } finally {
       router.refresh();
