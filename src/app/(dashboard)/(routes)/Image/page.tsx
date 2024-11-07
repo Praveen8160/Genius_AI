@@ -22,10 +22,12 @@ import {
 } from "@/components/ui/select";
 import { Card, CardFooter } from "@/components/ui/card";
 import Image from "next/image";
+import { useProModal } from "../../../../../hooks/useProModal";
 function page() {
   const [Images, setImages] = useState<string[] | null>([]);
   const { userId } = useAuth();
   const router = useRouter();
+  const proModal=useProModal();
   const useform = useForm<z.infer<typeof promptSchema>>({
     resolver: zodResolver(promptSchema),
     defaultValues: {
@@ -38,16 +40,21 @@ function page() {
     try {
       // console.log(val);
       // console.log(val.prompt);
-      const response = await axios.post("/api/Image/", {
+      const responses = await axios.post("/api/Image/", {
         prompt: val.prompt,
         amount: val.amount,
         userId: userId
       });
       setImages([]);
-      setImages(response.data.message);
+      setImages(responses.data.message);
       useform.reset();
-    } catch (error) {
-      setImages([]);
+      router.refresh();
+    } catch (error:any) {
+      // setImages([]);
+      if(error?.response?.status===403){
+        proModal.OnOpen();
+      }
+      console.log("error",error)
     } finally {
       router.refresh();
     }
