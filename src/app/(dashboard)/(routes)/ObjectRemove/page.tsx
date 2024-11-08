@@ -13,12 +13,15 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import Empty from "@/components/Empty";
 import { CldImage } from "next-cloudinary";
+import { useApiLimitStore } from "../../../../../hooks/useApiLimitStore";
+import { MAX_FREE_COUNT } from "../../../../../constants";
 function page() {
   const [result, setResult] = useState<string | null>(null);
   const [userprompt, setPrompt] = useState<string>("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const router = useRouter();
-
+  const { apiLimit } = useApiLimitStore();
+  console.log(apiLimit)
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
       setImageFile(e.target.files[0]);
@@ -32,6 +35,10 @@ function page() {
   });
   const isLoading = useform.formState.isSubmitting;
   const onsubmit = async (val: z.infer<typeof promptSchema>) => {
+    if (apiLimit >= MAX_FREE_COUNT) {
+      console.log("You have reached your free trial limit");
+      return;
+    }
     try {
       setResult("");
       if (!imageFile || !val.prompt) {

@@ -7,7 +7,6 @@ cloudinary.v2.config({
   api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
   api_secret: process.env.NEXT_PUBLIC_CLOUDINARY_API_SECRET,
 });
-// Disable Next.js bodyParser to handle form-data
 export async function POST(req: Request) {
   try {
     // Read the image from the request body

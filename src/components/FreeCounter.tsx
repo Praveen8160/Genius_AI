@@ -32,7 +32,11 @@ export const FreeCounter = ({ apilimitcount }: FreeCounterProps) => {
               value={(apilimitcount / MAX_FREE_COUNT) * 100}
             />
           </div>
-          <Button onClick={proModal.OnOpen} className="w-full" variant={"premium"}>
+          <Button
+            onClick={proModal.OnOpen}
+            className="w-full"
+            variant={"premium"}
+          >
             Upgrade<Zap className="w-4 h-4 ml-2 fill-white"></Zap>
           </Button>
         </CardContent>

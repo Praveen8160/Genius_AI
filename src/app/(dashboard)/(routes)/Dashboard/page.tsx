@@ -9,14 +9,15 @@ import {
   DeleteIcon,
   ImageIcon,
   MessageSquare,
-  Music,
   RemoveFormatting,
-  VideoIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { useApiLimitStore } from "../../../../../hooks/useApiLimitStore";
 function Dashboard() {
   const { isLoaded, userId } = useAuth();
+  // const apiLimit = useApiLimitStore((state) => state.apiLimit);
+  const fetchApiLimit = useApiLimitStore((state) => state.fetchApiLimit);
   if (!isLoaded) {
     return (
       <div className="flex items-center justify-center text-black">
@@ -31,7 +32,9 @@ function Dashboard() {
     return <RedirectToSignIn />;
   }
   else{
-    console.log(userId)
+    console.log("hello")
+    fetchApiLimit(userId);
+    console.log("hello2")
   }
   const tools = [
     {

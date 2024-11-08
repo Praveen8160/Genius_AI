@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { FreeCounter } from "./FreeCounter";
-import axios from "axios";
+import { useApiLimitStore } from "../../hooks/useApiLimitStore";
 const montserrat = Montserrat({ weight: "600", subsets: ["latin"] });
 const routes = [
   {
@@ -74,25 +74,24 @@ const routes = [
 function SIdebar() {
   const pathname = usePathname();
   const router = useRouter();
-  const [apilimit, setApilimit] = useState<any>();
-  const { userId } = useAuth();
-  useEffect(() => {
-    async function limit() {
-      try {
-        const response = await axios.post("/api/getApiLimit/", {
-          userId: userId,
-        });
-        console.log(response.data);
-        setApilimit(response.data);
-      } catch (error) {
-        console.log("error", error);
-      }
-      finally {
-        router.refresh();
-      }
-    }
-    limit();
-  }, [userId]);
+  const apiLimit = useApiLimitStore((state) => state.apiLimit);
+  // useEffect(() => {
+  //   async function limit() {
+  //     try {
+  //       const response = await axios.post("/api/getApiLimit/", {
+  //         userId: userId,
+  //       });
+  //       console.log(response.data);
+  //       setApilimit(response.data);
+  //     } catch (error) {
+  //       console.log("error", error);
+  //     }
+  //     finally {
+  //       router.refresh();
+  //     }
+  //   }
+  //   limit();
+  // }, [userId]);
   return (
     <div className="space-y-4 py-4 flex flex-col h-full bg-[#111827] text-white">
       <div className="px-3 py-2 flex-1">
@@ -125,7 +124,7 @@ function SIdebar() {
           ))}
         </div>
       </div>
-      {apilimit ? <FreeCounter apilimitcount={apilimit} /> : <Loader className="animate-spin self-center" />}
+      {apiLimit ? <FreeCounter apilimitcount={apiLimit} /> : <Loader className="animate-spin self-center" />}
     </div>
   );
 }

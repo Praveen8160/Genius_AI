@@ -13,9 +13,11 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import Empty from "@/components/Empty";
 import { useAuth } from "@clerk/nextjs";
+import { useProModal } from "../../../../../hooks/useProModal";
 function page() {
   const [music, setMusic] = useState<string | null>(null);
   const { userId } = useAuth();
+  const proModal = useProModal();
   const router = useRouter();
   const useform = useForm<z.infer<typeof promptSchema>>({
     resolver: zodResolver(promptSchema),
@@ -29,13 +31,16 @@ function page() {
       setMusic(null);
       const response = await axios.post("/api/Music", {
         prompt: val.prompt,
-        userId: userId
+        userId: userId,
       });
-      console.log("response",response);
-      console.log("response.data.audio",response.data.audio);
+      console.log("response", response);
+      console.log("response.data.audio", response.data.audio);
       setMusic(response.data.audio);
       useform.reset();
-    } catch (error) {
+    } catch (error: any) {
+      if (error?.response?.status === 403) {
+        proModal.OnOpen();
+      }
       console.error("Error generating Music:", error);
       setMusic("Failed to generate text.");
     } finally {
