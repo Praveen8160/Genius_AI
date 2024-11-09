@@ -18,11 +18,14 @@ import {
   Code,
   DeleteIcon,
   ImageIcon,
+  Loader,
   MessageSquare,
   RemoveFormatting,
   Zap,
 } from "lucide-react";
 import { Button } from "./ui/button";
+import axios from "axios";
+import { useState } from "react";
 export const ProModal = () => {
   const proModal = useProModal();
   const tools = [
@@ -63,6 +66,18 @@ export const ProModal = () => {
       bgcolor: "bg-emerald-700/10",
     },
   ];
+  const [loading, setLoading] = useState(false);
+  const onsubscribr = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get("/api/stripe");
+      window.location.href = (await response).data.url;
+    } catch (error) {
+      console.log("error", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <Dialog open={proModal.isOpen} onOpenChange={proModal.OnClose}>
       <DialogContent>
@@ -95,9 +110,19 @@ export const ProModal = () => {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button className="w-full" variant={"premium"} size="lg">
-            Upgrade
-            <Zap className="w-4 h-4 ml-2 fill-white"></Zap>
+          <Button
+            className="w-full"
+            variant={"premium"}
+            size="lg"
+            onClick={onsubscribr}
+          >
+            {loading ? (
+              <Loader className="animate-spin self-center" />
+            ) : (
+              <>
+                "Upgrade"<Zap className="w-4 h-4 ml-2 fill-white"></Zap>
+              </>
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

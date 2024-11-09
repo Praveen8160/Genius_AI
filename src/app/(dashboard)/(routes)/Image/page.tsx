@@ -23,11 +23,13 @@ import {
 import { Card, CardFooter } from "@/components/ui/card";
 import Image from "next/image";
 import { useProModal } from "../../../../../hooks/useProModal";
+import { useApiLimitStore } from "../../../../../hooks/useApiLimitStore";
 function page() {
   const [Images, setImages] = useState<string[] | null>([]);
   const { userId } = useAuth();
   const router = useRouter();
   const proModal=useProModal();
+  const { setApiLimit, apiLimit } = useApiLimitStore();
   const useform = useForm<z.infer<typeof promptSchema>>({
     resolver: zodResolver(promptSchema),
     defaultValues: {
@@ -47,6 +49,7 @@ function page() {
       });
       setImages([]);
       setImages(responses.data.message);
+      setApiLimit(apiLimit);
       useform.reset();
       router.refresh();
     } catch (error:any) {

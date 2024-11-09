@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useAuth, RedirectToSignIn } from "@clerk/nextjs";
 import { Card } from "@/components/ui/card";
 import {
@@ -16,7 +16,6 @@ import { useRouter } from "next/navigation";
 import { useApiLimitStore } from "../../../../../hooks/useApiLimitStore";
 function Dashboard() {
   const { isLoaded, userId } = useAuth();
-  // const apiLimit = useApiLimitStore((state) => state.apiLimit);
   const fetchApiLimit = useApiLimitStore((state) => state.fetchApiLimit);
   if (!isLoaded) {
     return (
@@ -25,17 +24,20 @@ function Dashboard() {
       </div>
     );
   }
-
-  // If user is not signed in, redirect to the Sign-In page
-  if (!userId) {
-    console.log("running")
-    return <RedirectToSignIn />;
-  }
-  else{
-    console.log("hello")
-    fetchApiLimit(userId);
-    console.log("hello2")
-  }
+  useEffect(()=>{
+    async function fatchlimit(){
+      if (!userId) {
+        console.log("running")
+        return <RedirectToSignIn />;
+      }
+      else{
+        console.log("hello")
+        await fetchApiLimit(userId);
+        console.log("hello2")
+      }
+    }
+    fatchlimit();
+  },[userId])
   const tools = [
     {
       label: "Conversation",
