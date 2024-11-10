@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
 import { checkAPiLimit, increaseApiLimit } from "@/lib/api-limit";
+import { subscription } from "@/lib/subscription";
 const HUGGING_FACE_API_KEY = process.env.HUGGING_FACE_API_KEY;
 
 export async function POST(req: Request) {
@@ -9,15 +10,17 @@ export async function POST(req: Request) {
   if (!prompt) {
     return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
   }
-  // console.log("before limit check");
-  const isfreeTrial = await checkAPiLimit(userId);
-  if (!isfreeTrial) {
-    return NextResponse.json(
-      { error: "You have reached your free trial limit" },
-      { status: 403 }
-    );
+  const ispro = await subscription(userId);
+  console.log("isPro", ispro);
+  if (!ispro) {
+    const isfreeTrial = await checkAPiLimit(userId);
+    if (!isfreeTrial) {
+      return NextResponse.json(
+        { error: "You have reached your free trial limit" },
+        { status: 403 }
+      );
+    }
   }
-  // console.log("after limit check");
   try {
     const responses = await Promise.all(
       Array.from({ length: amount || 1 }).map(() =>
@@ -33,7 +36,6 @@ export async function POST(req: Request) {
         )
       )
     );
-    // console.log(responses);
     const images = responses.map((response, idx) => {
       const base64Image = Buffer.from(response.data, "binary").toString(
         "base64"

@@ -1,5 +1,6 @@
 // import { NextApiRequest, NextApiResponse } from "next";
 import { checkAPiLimit, increaseApiLimit } from "@/lib/api-limit";
+import { subscription } from "@/lib/subscription";
 import { NextResponse } from "next/server";
 import Replicate from "replicate";
 
@@ -14,12 +15,16 @@ export async function POST(req: Request) {
   if (!prompt) {
     return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
   }
-  const isfreeTrial = await checkAPiLimit(userId);
-  if (!isfreeTrial) {
-    return NextResponse.json(
-      { error: "You have reached your free trial limit" },
-      { status: 403 }
-    );
+  const ispro = await subscription(userId);
+  console.log("isPro", ispro);
+  if (!ispro) {
+    const isfreeTrial = await checkAPiLimit(userId);
+    if (!isfreeTrial) {
+      return NextResponse.json(
+        { error: "You have reached your free trial limit" },
+        { status: 403 }
+      );
+    }
   }
   // const structuredPrompt = `
   //    You are an AI assistant. Provide a complete and well-formatted code snippet in response to the following request:
