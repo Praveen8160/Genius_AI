@@ -20,6 +20,7 @@ import {
 import { usePathname } from "next/navigation";
 import { FreeCounter } from "./FreeCounter";
 import { useApiLimitStore } from "../../hooks/useApiLimitStore";
+import axios from "axios";
 const montserrat = Montserrat({ weight: "600", subsets: ["latin"] });
 const routes = [
   {
@@ -67,20 +68,37 @@ const routes = [
   {
     label: "Settings",
     Icon: Settings,
-    href: "/Settings",
+    href: "/settings",
   },
 ];
 function SIdebar() {
   const pathname = usePathname();
-  const router = useRouter();
   const apiLimit = useApiLimitStore((state) => state.apiLimit);
   const fetchApiLimit = useApiLimitStore((state) => state.fetchApiLimit);
+  const fetched = useApiLimitStore((state) => state.fetched);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isPro, setIsPro] = useState(false);
   const { userId } = useAuth();
   useEffect(() => {
     async function fatchlimit() {
-      console.log("hello");
-      await fetchApiLimit(userId);
-      console.log("hello2");
+      if (userId) {
+        try {                                                 
+          setIsLoading(true);
+          const response = await axios.post("/api/subscription", {
+            userId,
+          });
+          setIsPro(response.data.isPro);
+        } catch (error) {
+          console.error("Failed to fetch subscription status:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+      if (!fetched && !isPro) {
+        setIsLoading(true);
+        await fetchApiLimit(userId);
+        setIsLoading(false);
+      }
     }
     fatchlimit();
   }, [fetchApiLimit]);
@@ -116,10 +134,10 @@ function SIdebar() {
           ))}
         </div>
       </div>
-      {apiLimit >= 0 ? (
-        <FreeCounter apilimitcount={apiLimit} />
-      ) : (
+      {isPro ? null : isLoading ? (
         <Loader className="animate-spin self-center" />
+      ) : (
+        <FreeCounter apilimitcount={apiLimit} />
       )}
     </div>
   );

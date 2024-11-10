@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { useAuth, RedirectToSignIn } from "@clerk/nextjs";
 import { Card } from "@/components/ui/card";
 import {
@@ -13,10 +13,9 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import { useApiLimitStore } from "../../../../../hooks/useApiLimitStore";
 function Dashboard() {
   const { isLoaded, userId } = useAuth();
-  const fetchApiLimit = useApiLimitStore((state) => state.fetchApiLimit);
+  // const fetchApiLimit = useApiLimitStore((state) => state.fetchApiLimit);
   if (!isLoaded) {
     return (
       <div className="flex items-center justify-center text-black">
@@ -24,20 +23,11 @@ function Dashboard() {
       </div>
     );
   }
-  useEffect(()=>{
-    async function fatchlimit(){
-      if (!userId) {
-        console.log("running")
-        return <RedirectToSignIn />;
-      }
-      else{
-        console.log("hello")
-        await fetchApiLimit(userId);
-        console.log("hello2")
-      }
-    }
-    fatchlimit();
-  },[userId])
+
+  if (!userId) {
+    return <RedirectToSignIn />;
+  }
+
   const tools = [
     {
       label: "Conversation",
@@ -61,11 +51,11 @@ function Dashboard() {
       bgcolor: "bg-orange-500/10",
     },
     {
-    label: "Object Removal",
-    Icon: DeleteIcon,
-    href: "/ObjectRemove",
-    color: "text-red-500",
-    bgcolor: "bg-red-500/10",
+      label: "Object Removal",
+      Icon: DeleteIcon,
+      href: "/ObjectRemove",
+      color: "text-red-500",
+      bgcolor: "bg-red-500/10",
     },
     {
       label: "Audio Generation",

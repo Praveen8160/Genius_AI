@@ -29,7 +29,7 @@ export const FreeCounter = ({ apilimitcount }: FreeCounterProps) => {
             </p>
             <Progress
               className="h-3"
-              value={(apilimitcount / MAX_FREE_COUNT) * 100}
+              value={(apilimitcount! / MAX_FREE_COUNT) * 100}
             />
           </div>
           <Button
