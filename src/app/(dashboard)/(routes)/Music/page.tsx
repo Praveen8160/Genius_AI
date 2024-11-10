@@ -14,6 +14,7 @@ import axios from "axios";
 import Empty from "@/components/Empty";
 import { useAuth } from "@clerk/nextjs";
 import { useProModal } from "../../../../../hooks/useProModal";
+import toast from "react-hot-toast";
 function page() {
   const [music, setMusic] = useState<string | null>(null);
   const { userId } = useAuth();
@@ -40,6 +41,9 @@ function page() {
     } catch (error: any) {
       if (error?.response?.status === 403) {
         proModal.OnOpen();
+      }
+      else {
+        toast.error("Something went wrong");
       }
       console.error("Error generating Music:", error);
       setMusic("Failed to generate text.");

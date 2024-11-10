@@ -13,10 +13,13 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import Empty from "@/components/Empty";
 import { useAuth } from "@clerk/nextjs";
+import { useProModal } from "../../../../../hooks/useProModal";
+import toast from "react-hot-toast";
 function page() {
   const [result, setResult] = useState<string | null>(null);
   const { userId } = useAuth();
   const router = useRouter();
+  const proModal = useProModal();
   const useform = useForm<z.infer<typeof promptSchema>>({
     resolver: zodResolver(promptSchema),
     defaultValues: {
@@ -29,13 +32,18 @@ function page() {
       console.log(val.prompt);
       const response = await axios.post("/api/Conversation/", {
         prompt: val.prompt,
-        userId: userId
+        userId: userId,
       });
       setResult(response.data);
       useform.reset();
-    } catch (error) {
-      console.error("Error generating text:", error);
-      setResult("Failed to generate text.");
+    } catch (error: any) {
+      if (error?.response?.status === 403) {
+        proModal.OnOpen();
+      } else {
+        toast.error("Something went wrong");
+      }
+      // console.error("Error generating text:", error);
+      // setResult("Failed to generate text.");
     } finally {
       router.refresh();
     }

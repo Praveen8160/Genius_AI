@@ -21,6 +21,7 @@ import { usePathname } from "next/navigation";
 import { FreeCounter } from "./FreeCounter";
 import { useApiLimitStore } from "../../hooks/useApiLimitStore";
 import axios from "axios";
+import toast from "react-hot-toast";
 const montserrat = Montserrat({ weight: "600", subsets: ["latin"] });
 const routes = [
   {
@@ -89,7 +90,8 @@ function SIdebar() {
           });
           setIsPro(response.data.isPro);
         } catch (error) {
-          console.error("Failed to fetch subscription status:", error);
+          toast.error("Failed to fetch subscription status");
+          // console.error("Failed to fetch subscription status:", error);
         } finally {
           setIsLoading(false);
         }

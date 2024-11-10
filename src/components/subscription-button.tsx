@@ -4,6 +4,7 @@ import { Zap } from "lucide-react";
 import { Button } from "./ui/button";
 import axios from "axios";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 interface Buttonprops {
   ispro: boolean;
@@ -16,7 +17,8 @@ export default function SubscriptionButton({ ispro = false }: Buttonprops) {
       const response = await axios.get("/api/stripe");
       window.location.href = (await response).data.url;
     } catch (error) {
-      console.log("error", error);
+      toast.error("Something went wrong");
+      // console.log("error", error);
     } finally {
       setLoading(false);
     }

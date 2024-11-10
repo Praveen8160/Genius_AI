@@ -24,11 +24,12 @@ import { Card, CardFooter } from "@/components/ui/card";
 import Image from "next/image";
 import { useProModal } from "../../../../../hooks/useProModal";
 import { useApiLimitStore } from "../../../../../hooks/useApiLimitStore";
+import toast from "react-hot-toast";
 function page() {
   const [Images, setImages] = useState<string[] | null>([]);
   const { userId } = useAuth();
   const router = useRouter();
-  const proModal=useProModal();
+  const proModal = useProModal();
   const { setApiLimit, apiLimit } = useApiLimitStore();
   const useform = useForm<z.infer<typeof promptSchema>>({
     resolver: zodResolver(promptSchema),
@@ -45,19 +46,21 @@ function page() {
       const responses = await axios.post("/api/Image/", {
         prompt: val.prompt,
         amount: val.amount,
-        userId: userId
+        userId: userId,
       });
       setImages([]);
       setImages(responses.data.message);
       setApiLimit(apiLimit);
       useform.reset();
       router.refresh();
-    } catch (error:any) {
+    } catch (error: any) {
       // setImages([]);
-      if(error?.response?.status===403){
+      if (error?.response?.status === 403) {
         proModal.OnOpen();
+      } else {
+        toast.error("Something went wrong");
       }
-      console.log("error",error)
+      // console.log("error",error)
     } finally {
       router.refresh();
     }
@@ -137,7 +140,7 @@ function page() {
               <p>Genius Generating...</p>
             </div>
           )}
-          {(Images === null||Images.length===0) && !isLoading && (
+          {(Images === null || Images.length === 0) && !isLoading && (
             <Empty label="No Image Generated yet" />
           )}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-4 gap-4 mt-8">

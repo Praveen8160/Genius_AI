@@ -1,7 +1,7 @@
 "use client";
 import Heading from "@/components/Heading";
 import * as z from "zod";
-import { Loader,Code } from "lucide-react";
+import { Loader, Code } from "lucide-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { promptSchema } from "./Constants";
@@ -13,10 +13,13 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import Empty from "@/components/Empty";
 import { useAuth } from "@clerk/nextjs";
+import { useProModal } from "../../../../../hooks/useProModal";
+import toast from "react-hot-toast";
 function page() {
   const [result, setResult] = useState<string | null>(null);
   const { userId } = useAuth();
   const router = useRouter();
+  const proModal = useProModal();
   const useform = useForm<z.infer<typeof promptSchema>>({
     resolver: zodResolver(promptSchema),
     defaultValues: {
@@ -35,14 +38,19 @@ function page() {
       console.log(val.prompt);
       const response = await axios.post("/api/Code/", {
         prompt: val.prompt,
-        userId: userId
+        userId: userId,
       });
       console.log(response.data);
       // const codeSnippet = extractCodeSnippet(response.data.message);
       setResult(response.data);
       useform.reset();
-    } catch (error) {
-      console.error("Error generating Code:", error);
+    } catch (error: any) {
+      if (error?.response?.status === 403) {
+        proModal.OnOpen();
+      } else {
+        setResult("Failed to generate Code.");
+        toast.error("Something went wrong");
+      }
       setResult("Failed to generate Code.");
     } finally {
       router.refresh();
@@ -101,8 +109,8 @@ function page() {
           )}
           {result && (
             <pre className="p-4 border rounded bg-gray-100 whitespace-pre-wrap">
-                <code className="language-javascript">{result}</code>
-              </pre>
+              <code className="language-javascript">{result}</code>
+            </pre>
           )}
         </div>
       </div>
