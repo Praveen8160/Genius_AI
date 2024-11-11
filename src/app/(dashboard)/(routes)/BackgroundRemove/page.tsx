@@ -9,10 +9,13 @@ import Empty from "@/components/Empty";
 import { CldImage } from "next-cloudinary";
 import { useApiLimitStore } from "../../../../../hooks/useApiLimitStore";
 import { MAX_FREE_COUNT } from "../../../../../constants";
+import toast from "react-hot-toast";
+import { useAuth } from "@clerk/nextjs";
 function Page() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isLoading, setisLoading] = useState(false);
+  const { userId }: any = useAuth();
   const router = useRouter();
   const { apiLimit } = useApiLimitStore();
   // console.log("apiLimit", apiLimit);
@@ -24,7 +27,7 @@ function Page() {
 
   const handleUpload = async () => {
     if (apiLimit >= MAX_FREE_COUNT) {
-      console.log("You have reached your free trial limit");
+      toast.error("You have reached your free trial limit");
       return;
     }
     setisLoading(true);
@@ -35,6 +38,7 @@ function Page() {
     }
     const formData = new FormData();
     formData.append("file", imageFile);
+    formData.append("userId", userId);
     try {
       const response = await axios.post("/api/removeBackground", formData, {
         headers: {
@@ -43,8 +47,12 @@ function Page() {
       });
       console.log("response.url", response.data.url);
       setImageUrl(response.data.url);
-    } catch (error) {
-      console.error("Error processing image:", error);
+    } catch (error: any) {
+      if (error?.response?.status === 403) {
+        toast.error("You have reached your free trial limit");
+      } else {
+        toast.error("Something went wrong");
+      }
     } finally {
       setisLoading(false);
       router.refresh();

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import cloudinary from "cloudinary";
+import { subscription } from "@/lib/subscription";
 
 // Set up Cloudinary configuration
 cloudinary.v2.config({
@@ -9,10 +10,18 @@ cloudinary.v2.config({
 });
 export async function POST(req: Request) {
   try {
-    // Read the image from the request body
     const formData = await req.formData();
     const file = formData.get("file");
-
+    const userId = formData.get("userId");
+    const ispro = await subscription(userId);
+    console.log("isPro", ispro);
+    if (!ispro) {
+      return NextResponse.json(
+        { error: "You have reached your free trial limit" },
+        { status: 403 }
+      );
+    }
+    console.log("after limit check");
     if (!file || !(file instanceof Blob)) {
       return NextResponse.json(
         { error: "No valid file uploaded" },
