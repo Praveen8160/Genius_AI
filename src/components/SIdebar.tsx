@@ -4,7 +4,6 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { Montserrat } from "next/font/google";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
 import {
   Code,
@@ -83,7 +82,7 @@ function SIdebar() {
   useEffect(() => {
     async function fatchlimit() {
       if (userId) {
-        try {                                                 
+        try {
           setIsLoading(true);
           const response = await axios.post("/api/subscription", {
             userId,
@@ -103,7 +102,7 @@ function SIdebar() {
       }
     }
     fatchlimit();
-  }, [fetchApiLimit]);
+  }, [fetchApiLimit, userId, isPro, fetched]);
   return (
     <div className="space-y-4 py-4 flex flex-col h-full bg-[#111827] text-white">
       <div className="px-3 py-2 flex-1">

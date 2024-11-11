@@ -25,7 +25,7 @@ import Image from "next/image";
 import { useProModal } from "../../../../../hooks/useProModal";
 import { useApiLimitStore } from "../../../../../hooks/useApiLimitStore";
 import toast from "react-hot-toast";
-function page() {
+function Page() {
   const [Images, setImages] = useState<string[] | null>([]);
   const { userId } = useAuth();
   const router = useRouter();
@@ -168,4 +168,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

@@ -14,6 +14,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 function Dashboard() {
+  const router = useRouter();
   const { isLoaded, userId } = useAuth();
   // const fetchApiLimit = useApiLimitStore((state) => state.fetchApiLimit);
   if (!isLoaded) {
@@ -72,7 +73,7 @@ function Dashboard() {
       bgcolor: "bg-emerald-700/10",
     },
   ];
-  const router = useRouter();
+  
   return (
     <div>
       <div className="mb-8 space-y-4">

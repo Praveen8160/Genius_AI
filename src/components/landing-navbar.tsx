@@ -16,8 +16,15 @@ export const LandingNavbar = () => {
         <div className="relative h-8 w-8 mr-4">
           <Image fill src="/logo.jpg" alt="logo" />
         </div>
-        <h1 className={cn("text-2xl font-bold", font.className)}> Genius</h1>
+        <h1 className={cn("text-2xl font-bold text-white", font.className)}> Genius</h1>
       </Link>
+      <div className="flex item-center gap-x-2">
+        <Link href={isSignedIn ? "/Dashboard" : "/sign-up"}>
+          <Button variant="outline" className="rounded-full">
+            Get Started
+          </Button>
+        </Link>
+      </div>
     </nav>
   );
 };

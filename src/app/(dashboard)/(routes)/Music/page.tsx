@@ -1,7 +1,7 @@
 "use client";
 import Heading from "@/components/Heading";
 import * as z from "zod";
-import { AudioLinesIcon, Loader, Music } from "lucide-react";
+import { AudioLinesIcon, Loader } from "lucide-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { promptSchema } from "./Constants";
@@ -15,7 +15,7 @@ import Empty from "@/components/Empty";
 import { useAuth } from "@clerk/nextjs";
 import { useProModal } from "../../../../../hooks/useProModal";
 import toast from "react-hot-toast";
-function page() {
+function Page() {
   const [music, setMusic] = useState<string | null>(null);
   const { userId } = useAuth();
   const proModal = useProModal();
@@ -113,4 +113,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

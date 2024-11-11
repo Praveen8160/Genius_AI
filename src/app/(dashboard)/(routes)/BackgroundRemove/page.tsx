@@ -9,7 +9,7 @@ import Empty from "@/components/Empty";
 import { CldImage } from "next-cloudinary";
 import { useApiLimitStore } from "../../../../../hooks/useApiLimitStore";
 import { MAX_FREE_COUNT } from "../../../../../constants";
-function page() {
+function Page() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isLoading, setisLoading] = useState(false);
@@ -107,4 +107,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

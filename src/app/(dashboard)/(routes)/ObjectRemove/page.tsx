@@ -1,7 +1,7 @@
 "use client";
 import Heading from "@/components/Heading";
 import * as z from "zod";
-import { DeleteIcon, LinkIcon, Loader } from "lucide-react";
+import { DeleteIcon, Loader } from "lucide-react";
 import React, { use, useState } from "react";
 import { useForm } from "react-hook-form";
 import { promptSchema } from "./Constants";
@@ -15,7 +15,7 @@ import Empty from "@/components/Empty";
 import { CldImage } from "next-cloudinary";
 import { useApiLimitStore } from "../../../../../hooks/useApiLimitStore";
 import { MAX_FREE_COUNT } from "../../../../../constants";
-function page() {
+function Page() {
   const [result, setResult] = useState<string | null>(null);
   const [userprompt, setPrompt] = useState<string>("");
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -144,4 +144,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

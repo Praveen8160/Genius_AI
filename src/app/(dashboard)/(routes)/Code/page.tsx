@@ -15,7 +15,7 @@ import Empty from "@/components/Empty";
 import { useAuth } from "@clerk/nextjs";
 import { useProModal } from "../../../../../hooks/useProModal";
 import toast from "react-hot-toast";
-function page() {
+function Page() {
   const [result, setResult] = useState<string | null>(null);
   const { userId } = useAuth();
   const router = useRouter();
@@ -118,4 +118,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

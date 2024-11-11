@@ -122,7 +122,7 @@ export const ProModal = () => {
               <Loader className="animate-spin self-center" />
             ) : (
               <>
-                "Upgrade"<Zap className="w-4 h-4 ml-2 fill-white"></Zap>
+                Upgrade <Zap className="w-4 h-4 ml-2 fill-white"></Zap>
               </>
             )}
           </Button>
