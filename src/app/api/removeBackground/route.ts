@@ -13,7 +13,7 @@ export async function POST(req: Request) {
   try {
     const formData = await req.formData();
     const file = formData.get("file");
-    const userId = req.json();
+    const userId = formData.get("userId");
     // const userId = formData.get("userId");
     console.log("User id is", userId);
     const ispro = await subscription(userId);

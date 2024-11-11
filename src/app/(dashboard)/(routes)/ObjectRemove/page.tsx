@@ -37,30 +37,21 @@ function Page() {
   });
   const isLoading = useform.formState.isSubmitting;
   const onsubmit = async (val: z.infer<typeof promptSchema>) => {
-    // if (apiLimit >= MAX_FREE_COUNT) {
-    //   console.log("You have reached your free trial limit");
-    //   return;
-    // }
     try {
       setResult("");
       if (!imageFile || !val.prompt) {
         alert("Please upload an image and enter a prompt");
         return;
       }
-      console.log(val.prompt);
       setPrompt(val.prompt);
       const formData = new FormData();
       formData.append("file", imageFile);
       formData.append("userId", userId);
-      const response = await axios.post(
-        "/api/removeBackground",
-        { formData, userId },
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.post("/api/removeBackground", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       console.log("response.url", response.data.url);
       setResult(response.data.url);
     } catch (error) {
