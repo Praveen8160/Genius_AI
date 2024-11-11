@@ -17,8 +17,6 @@ function Page() {
   const [isLoading, setisLoading] = useState(false);
   const { userId }: any = useAuth();
   const router = useRouter();
-  const { apiLimit } = useApiLimitStore();
-  // console.log("apiLimit", apiLimit);
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
       setImageFile(e.target.files[0]);
@@ -26,10 +24,6 @@ function Page() {
   };
 
   const handleUpload = async () => {
-    if (apiLimit >= MAX_FREE_COUNT) {
-      toast.error("You have reached your free trial limit");
-      return;
-    }
     setisLoading(true);
     setImageUrl("");
     if (!imageFile) {

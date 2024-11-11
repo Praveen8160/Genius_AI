@@ -13,8 +13,6 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import Empty from "@/components/Empty";
 import { CldImage } from "next-cloudinary";
-import { useApiLimitStore } from "../../../../../hooks/useApiLimitStore";
-import { MAX_FREE_COUNT } from "../../../../../constants";
 import { useAuth } from "@clerk/nextjs";
 function Page() {
   const [result, setResult] = useState<string | null>(null);
@@ -22,8 +20,6 @@ function Page() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const router = useRouter();
   const { userId }: any = useAuth();
-  // const { apiLimit } = useApiLimitStore();
-  // console.log(apiLimit)
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
       setImageFile(e.target.files[0]);
