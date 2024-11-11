@@ -96,9 +96,6 @@ function Page() {
               <p>Genius Thinking...</p>
             </div>
           )}
-          {isLoading && (
-            <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted"></div>
-          )}
           {result === null && !isLoading && (
             <Empty label="No Conversation yet" />
           )}

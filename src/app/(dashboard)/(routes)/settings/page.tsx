@@ -47,8 +47,8 @@ const SettingsPage = () => {
         </div>
       ) : (
         <div className="px-4 lg:px-8 space-y-4">
-          <div className="text-muted-foreground text-sm">
-            {isPro ? "You are a pro" : "You are not a pro"}
+          <div className="text-muted-foreground text-lg font-semibold">
+            {isPro ? "You are a Pro User" : "You are not a Pro User"}
           </div>
           <SubscriptionButton ispro={isPro} />
         </div>
