@@ -15,11 +15,13 @@ import Empty from "@/components/Empty";
 import { useAuth } from "@clerk/nextjs";
 import { useProModal } from "../../../../../hooks/useProModal";
 import toast from "react-hot-toast";
+import { useApiLimitStore } from "../../../../../hooks/useApiLimitStore";
 function Page() {
   const [music, setMusic] = useState<string | null>(null);
   const { userId } = useAuth();
   const proModal = useProModal();
   const router = useRouter();
+  const { setApiLimit, apiLimit } = useApiLimitStore();
   const useform = useForm<z.infer<typeof promptSchema>>({
     resolver: zodResolver(promptSchema),
     defaultValues: {
@@ -37,12 +39,12 @@ function Page() {
       console.log("response", response);
       console.log("response.data.audio", response.data.audio);
       setMusic(response.data.audio);
+      setApiLimit(apiLimit);
       useform.reset();
     } catch (error: any) {
       if (error?.response?.status === 403) {
         proModal.OnOpen();
-      }
-      else {
+      } else {
         toast.error("Something went wrong");
       }
       console.error("Error generating Music:", error);

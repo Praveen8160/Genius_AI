@@ -45,6 +45,7 @@ export async function POST(req: Request) {
     await increaseApiLimit(userId);
     return NextResponse.json({ message: images }, { status: 200 });
   } catch (error) {
+    console.log("error", error);
     console.error("Error with Hugging Face request:", error);
     return NextResponse.json(
       { error: "Failed to generate text" },

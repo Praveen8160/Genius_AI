@@ -58,6 +58,7 @@ function Page() {
       if (error?.response?.status === 403) {
         proModal.OnOpen();
       } else {
+        console.log("error", error);
         toast.error("Something went wrong");
       }
       // console.log("error",error)
