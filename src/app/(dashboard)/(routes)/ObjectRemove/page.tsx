@@ -15,13 +15,15 @@ import Empty from "@/components/Empty";
 import { CldImage } from "next-cloudinary";
 import { useApiLimitStore } from "../../../../../hooks/useApiLimitStore";
 import { MAX_FREE_COUNT } from "../../../../../constants";
+import { useAuth } from "@clerk/nextjs";
 function Page() {
   const [result, setResult] = useState<string | null>(null);
   const [userprompt, setPrompt] = useState<string>("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const router = useRouter();
-  const { apiLimit } = useApiLimitStore();
-  console.log(apiLimit)
+  const { userId }: any = useAuth();
+  // const { apiLimit } = useApiLimitStore();
+  // console.log(apiLimit)
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
       setImageFile(e.target.files[0]);
@@ -35,10 +37,10 @@ function Page() {
   });
   const isLoading = useform.formState.isSubmitting;
   const onsubmit = async (val: z.infer<typeof promptSchema>) => {
-    if (apiLimit >= MAX_FREE_COUNT) {
-      console.log("You have reached your free trial limit");
-      return;
-    }
+    // if (apiLimit >= MAX_FREE_COUNT) {
+    //   console.log("You have reached your free trial limit");
+    //   return;
+    // }
     try {
       setResult("");
       if (!imageFile || !val.prompt) {
@@ -49,11 +51,16 @@ function Page() {
       setPrompt(val.prompt);
       const formData = new FormData();
       formData.append("file", imageFile);
-      const response = await axios.post("/api/removeBackground", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      formData.append("userId", userId);
+      const response = await axios.post(
+        "/api/removeBackground",
+        { formData },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       console.log("response.url", response.data.url);
       setResult(response.data.url);
     } catch (error) {

@@ -29,7 +29,7 @@ export const increaseApiLimit = async (userId: string | null) => {
   });
 };
 
-export const checkAPiLimit = async (userId: string | null) => {
+export const checkAPiLimit = async (userId: any) => {
   try {
     if (!userId) {
       return false;
