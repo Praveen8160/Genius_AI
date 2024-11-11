@@ -78,7 +78,7 @@ function Page() {
                         className="
                             border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
                         disabled={isLoading}
-                        placeholder="Piano solo"
+                        placeholder="Hello I'm a generate text to Audio"
                         {...field}
                       />
                     </FormControl>
@@ -102,7 +102,7 @@ function Page() {
             </div>
           )}
           {music === null && !isLoading && (
-            <Empty label="No Music generated yet" />
+            <Empty label="No Audio generated yet" />
           )}
           {music && (
             <audio controls className="w-full mt-8">
