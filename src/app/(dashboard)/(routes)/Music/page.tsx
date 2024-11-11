@@ -78,7 +78,7 @@ function Page() {
                         className="
                             border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
                         disabled={isLoading}
-                        placeholder="Hello I'm a generate text to Audio"
+                        placeholder="Hello, I am ..."
                         {...field}
                       />
                     </FormControl>
