@@ -54,7 +54,7 @@ function Page() {
       formData.append("userId", userId);
       const response = await axios.post(
         "/api/removeBackground",
-        { formData },
+        { formData, userId },
         {
           headers: {
             "Content-Type": "multipart/form-data",
