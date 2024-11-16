@@ -34,16 +34,14 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
-
-    // Convert file to base64
     const fileBuffer = Buffer.from(await file.arrayBuffer());
     const base64Image = fileBuffer.toString("base64");
 
-    // Upload the image to Cloudinary
+
     const uploadResponse = await cloudinary.v2.uploader.upload(
       `data:image/jpeg;base64,${base64Image}`,
       {
-        folder: "user_uploads", // Optional folder in Cloudinary
+        folder: "user_uploads", 
       }
     );
 
