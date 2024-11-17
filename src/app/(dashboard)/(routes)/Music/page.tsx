@@ -1,7 +1,7 @@
 "use client";
 import Heading from "@/components/Heading";
 import * as z from "zod";
-import { AudioLinesIcon, Loader } from "lucide-react";
+import { AudioLinesIcon, Loader, Volume2 } from "lucide-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { promptSchema } from "./Constants";
@@ -58,7 +58,7 @@ function Page() {
       <Heading
         title="Audio"
         description="Turn Your Prompt Into Audio"
-        Icon={AudioLinesIcon}
+        Icon={Volume2}
         iconColor="text-emerald-700"
         bgColor="bg-emerald-700/10"
       ></Heading>

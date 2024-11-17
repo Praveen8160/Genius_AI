@@ -1,7 +1,7 @@
 "use client";
 import Heading from "@/components/Heading";
 import * as z from "zod";
-import { DeleteIcon, Loader } from "lucide-react";
+import { DeleteIcon, Eraser, Loader } from "lucide-react";
 import React, { use, useState } from "react";
 import { useForm } from "react-hook-form";
 import { promptSchema } from "./Constants";
@@ -62,7 +62,7 @@ function Page() {
       <Heading
         title="Object Removal"
         description="Remove an object from an image"
-        Icon={DeleteIcon}
+        Icon={Eraser}
         iconColor="text-red-500"
         bgColor="bg-red-500/10"
       ></Heading>

@@ -1,6 +1,6 @@
 "use client";
 import Heading from "@/components/Heading";
-import { Loader, RemoveFormattingIcon } from "lucide-react";
+import { ImageIcon, Loader, RemoveFormattingIcon } from "lucide-react";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -58,7 +58,7 @@ function Page() {
       <Heading
         title="Background Removal"
         description="Remove Background from your image"
-        Icon={RemoveFormattingIcon}
+        Icon={ImageIcon}
         iconColor="text-yellow-500"
         bgColor="bg-yellow-500/10"
       />

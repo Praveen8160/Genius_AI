@@ -1,7 +1,7 @@
 "use client";
 import Heading from "@/components/Heading";
 import * as z from "zod";
-import { Loader, ImageIcon, Download } from "lucide-react";
+import { Loader, ImageIcon, Download, PenTool } from "lucide-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { amountOption, promptSchema } from "./Constants";
@@ -71,7 +71,7 @@ function Page() {
       <Heading
         title="Image"
         description="Generate Image with Genius AI"
-        Icon={ImageIcon}
+        Icon={PenTool}
         iconColor="text-pink-700"
         bgColor="bg-pink-700/10"
       ></Heading>
