@@ -138,9 +138,7 @@ function SIdebar() {
           ))}
         </div>
       </div>
-      {isPro ? null : isLoading ? (
-        <Loader className="animate-spin self-center" />
-      ) : (
+      {isPro ? null : isLoading ? null : (
         <FreeCounter apilimitcount={apiLimit} />
       )}
     </div>

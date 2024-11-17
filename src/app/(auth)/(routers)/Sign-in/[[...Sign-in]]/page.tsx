@@ -90,7 +90,7 @@ export default function Page() {
                 href="/Sign-up"
                 className="text-sm text-blue-400 hover:text-blue-300"
               >
-                Don't have an account? Sign up
+                have an account? Sign up
               </Link>
             </div>
           </CardFooter>
