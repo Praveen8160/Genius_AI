@@ -64,7 +64,7 @@ const features = [
 const LandingFeature = () => {
   return (
     <main className="flex-1">
-      <section className="w-full pb-12 md:pb-24 lg:pb-20 bg-gray-900">
+      <section className="w-full pb-12 md:pb-24 lg:pb-20 bg-gray-900 flex justify-center items-center">
         <div className="container px-4 md:px-6">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-cyan-400">
             Our Features
@@ -86,15 +86,12 @@ const LandingFeature = () => {
                     {feature.description}
                   </CardDescription>
                 </CardContent>
-                <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <ArrowRight className="h-5 w-5 text-purple-400" />
-                </div>
               </Card>
             ))}
           </div>
         </div>
       </section>
-      <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-br from-gray-900 to-purple-900">
+      <section className="w-full rounded-md py-12 md:py-24 lg:py-32 bg-gradient-to-br from-gray-900 to-purple-900">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">

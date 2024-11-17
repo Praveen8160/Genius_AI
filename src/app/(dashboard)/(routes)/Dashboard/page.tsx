@@ -7,9 +7,12 @@ import {
   AudioLinesIcon,
   Code,
   DeleteIcon,
+  Eraser,
   ImageIcon,
   MessageSquare,
+  PenTool,
   RemoveFormatting,
+  Volume2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
@@ -39,28 +42,28 @@ function Dashboard() {
     },
     {
       label: "Image Generation",
-      Icon: ImageIcon,
+      Icon: PenTool,
       href: "/Image",
       color: "text-pink-700",
       bgcolor: "bg-pink-700/10",
     },
     {
       label: "Background Removal",
-      Icon: RemoveFormatting,
+      Icon: ImageIcon,
       href: "/BackgroundRemove",
       color: "text-orange-500",
       bgcolor: "bg-orange-500/10",
     },
     {
       label: "Object Removal",
-      Icon: DeleteIcon,
+      Icon: Eraser,
       href: "/ObjectRemove",
       color: "text-red-500",
       bgcolor: "bg-red-500/10",
     },
     {
       label: "Audio Generation",
-      Icon: AudioLinesIcon,
+      Icon: Volume2,
       href: "/Music",
       color: "text-emerald-500",
       bgcolor: "bg-emerald-500/10",

@@ -8,13 +8,16 @@ import { useAuth } from "@clerk/nextjs";
 import {
   Code,
   DeleteIcon,
+  Eraser,
   ImageIcon,
   LayoutDashboard,
   Loader,
   MessageSquare,
   Music,
+  PenTool,
   RemoveFormatting,
   Settings,
+  Volume2,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { FreeCounter } from "./FreeCounter";
@@ -37,25 +40,25 @@ const routes = [
   },
   {
     label: "Image Generation",
-    Icon: ImageIcon,
+    Icon: PenTool,
     href: "/Image",
     color: "text-pink-700",
   },
   {
     label: "Background Removal",
-    Icon: RemoveFormatting,
+    Icon: ImageIcon,
     href: "/BackgroundRemove",
     color: "text-orange-500",
   },
   {
     label: "Object Removal",
-    Icon: DeleteIcon,
+    Icon: Eraser,
     href: "/ObjectRemove",
     color: "text-red-500",
   },
   {
     label: "Audio Generation",
-    Icon: Music,
+    Icon: Volume2,
     href: "/Music",
     color: "text-emerald-500",
   },
